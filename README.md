@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🏛️ CivicPulse — AI-Powered Civic Platform
+# 🏛️ CivicPulse: AI-Powered Civic Complaint Management System
 
 ### _Empowering Smart Cities Through AI-Driven Civic Intelligence_
 
