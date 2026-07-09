@@ -24,7 +24,7 @@
 
 [🚀 Get Started](#-installation) · [📖 Documentation](#-overview) · [🤝 Contribute](CONTRIBUTING.md) · [📸 Screenshots](#-screenshots)
 
-<img src="assets/banner.png" alt="CivicPulse Banner" width="100%" />
+
 
 </div>
 
