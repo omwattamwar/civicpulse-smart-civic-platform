@@ -1,10 +1,10 @@
 # CivicPulse - AI-Powered Civic Complaint Management System
 
 <div align="center">
-  <img src="assets/banner-placeholder.png" alt="CivicPulse Banner" width="100%" />
+  <img src="assets/banner.png" alt="CivicPulse Banner" width="100%" />
   <br/>
   <br/>
-  <img src="assets/logo-placeholder.png" alt="CivicPulse Logo" width="150" />
+  <img src="assets/logo.png" alt="CivicPulse Logo" width="150" />
 
   <h3>Empowering Smart Cities Through AI-Driven Civic Complaint Resolution.</h3>
   
@@ -109,7 +109,7 @@ npm run dev
 
 | Citizen Dashboard | Authority Dashboard | Report Issue View |
 | :---: | :---: | :---: |
-| <img src="assets/citizen-dashboard-placeholder.png" alt="Citizen Dashboard" width="250"/> | <img src="assets/authority-dashboard-placeholder.png" alt="Authority Dashboard" width="250"/> | <img src="assets/report-issue-placeholder.png" alt="Report Issue" width="250"/> |
+| <img src="assets/citizen-dashboard.png" alt="Citizen Dashboard" width="250"/> | <img src="assets/authority-dashboard.png" alt="Authority Dashboard" width="250"/> | <img src="assets/report-issue.png" alt="Report Issue" width="250"/> |
 
 ---
 
