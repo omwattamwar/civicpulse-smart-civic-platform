@@ -1,0 +1,63 @@
+CIVICPULSE - FEATURES AND WEBSITE FLOW
+======================================
+
+1. MAIN FEATURES
+----------------
+A. Role-Based Access Control (RBAC)
+- Distinct dashboards and functionalities tailored for "Citizens" and "Authorities".
+- Secure authentication flow ensuring authorities cannot log into citizen portals and vice versa.
+
+B. AI-Powered Civic Reporting
+- Automated Category Parsing: As a citizen types a description, AI analyzes the text and instantly suggests the most relevant category (e.g., "Water Leakage", "Road Damage").
+- Sentiment & Severity Prediction: AI models analyze the urgency of a report (0-100% severity scale), allowing authorities to prioritize dangerous hazards automatically.
+- Duplicate Detection: Semantic analysis flags incoming reports that closely match existing unresolved issues in the same geographical area.
+
+C. Multilingual Interface
+- Built-in `i18n` support, offering a seamless toggle across 6 major languages: English, Hindi, Marathi, Tamil, Telugu, Kannada.
+- Full UI translation covering navigation, forms, alerts, and analytics summaries.
+
+D. Rich Media & Geolocation
+- Cloudinary Image Uploads: Secure, asynchronous, multi-image uploads demonstrating the issue visually.
+- Precise Mapping: HTML5 Geolocation, IP fallback, and dual Reverse Geocoding pipelines (ArcGis & OpenStreetMap) identify the exact neighborhood of an issue.
+
+E. Authority Triage Dashboard
+- Kanban & Table Layouts for sorting complaints by Status, Priority, Date, and AI Severity.
+- Quick-action buttons to instantly transition workflows: Submitted -> In Progress -> Resolved, or Rejected.
+- Executive AI summaries auto-generated for complex municipal issues.
+
+F. Public Analytics
+- Visual tracking of issue resolution speeds, total volume across departments, and platform efficiency rendered via interactive Recharts.
+
+2. USER JOURNEY / WEBSITE FLOW
+------------------------------
+A. Unauthenticated Flow
+1. Landing Page (`/`): Users arrive at a beautifully animated hero section explaining the platform. They can view platform statistics and interact with a multilingual dropdown.
+2. Sign In Choices: The hero section guides users to "Report as Citizen" or "Authority Login".
+3. Registration/Login (`/login`, `/register`):
+   - Auth pages separate contexts cleanly.
+   - Tabs allow toggling between Citizen and Authority logins.
+   - "Quick Demo" buttons fill out credentials instantly for evaluation.
+
+B. Citizen Flow
+1. Citizen Dashboard (`/citizen/dashboard`): A centralized hub showing a high-level overview of their reported issues and their current statuses (Submitted, In Progress, Resolved).
+2. Report Issue (`/citizen/report`): 
+   - User provides Title, Description, Category.
+   - Voice Input option available relying on Web Speech API.
+   - User attaches photos (uploaded to Cloudinary).
+   - User fetches live GPS Location. 
+   - Form submission pushes data to Firestore.
+3. My Complaints (`/citizen/complaints`): A sortable, searchable list of all issues ever reported by that specific citizen.
+4. Complaint Detail (`/citizen/complaints/:id`): Clicking a report reveals the comprehensive view of timeline updates, AI feedback, attached media, and map routing out links.
+
+C. Authority Flow
+1. Authority Dashboard (`/authority/dashboard`): An eagle-eye view of municipal health. Summarizes pending tasks, high-priority issues, and recent AI-flagged hazards.
+2. Manage Complaints (`/authority/complaints`):
+   - The primary workbench for town officials.
+   - Features complex table filtering.
+   - Clicking a table row opens a deep-diving Modal with AI Analysis.
+   - Authorities modify the state (Mark in progress, resolve, update priority).
+3. Departments View (`/authority/departments`): High-level overview of specific department leads (e.g., Water Board vs. Public Works) and their respective SLAs.
+
+D. Shared Flows
+1. Analytics (`/analytics`): Both Citizens and Authorities can observe trend data via line charts and bar graphs, fostering transparency.
+2. Profile & Settings (`/profile`, `/settings`): Basic user management and account customization workflows.

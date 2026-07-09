@@ -1,0 +1,42 @@
+CIVICPULSE - SYSTEM ARCHITECTURE AND TECH STACK
+=============================================
+
+1. OVERVIEW
+-----------
+CivicPulse is a modern, responsive web application designed as a "Smart Civic Intelligence Platform." It serves as a bridge between citizens and local authorities, enabling seamless reporting, tracking, and resolution of civic issues (e.g., potholes, water leaks, broken streetlights). The application incorporates AI-driven classification, severity prediction, and multilingual support to ensure accessibility and efficient issue management.
+
+2. TECHNOLOGY STACK
+-------------------
+The platform is built using a modern JavaScript/React ecosystem, prioritizing performance, user experience, and scalable integrations.
+
+A. Frontend Framework & UI
+- React (v19): The core UI library used for building interactive and component-based user interfaces.
+- Vite (v7): Fast frontend build tool and development server, chosen for superior hot-module replacement and optimized production builds.
+- Tailwind CSS (v4): Utility-first CSS framework used for rapid UI development, theming (dark mode default), and responsive design.
+- Lucide React: A comprehensive icon library for clean, consistent SVG iconography across the interface.
+- React Router DOM (v7): Handles client-side routing, enabling a Single Page Application (SPA) experience with protected role-based routes.
+
+B. Context & State Management
+- React Context API: Used for global state management to handle Authentication (`AuthContext`), Complaints (`ComplaintContext`), and AI processing interactions.
+
+C. Backend as a Service (BaaS) & Cloud Storage
+- Firebase Authentication: Manages secure user registration and login workflows.
+- Firebase Firestore: A NoSQL cloud database used to persist user profiles and complaint records in real-time.
+- Cloudinary: Integrated via REST API (unsigned preset) to securely handle user media uploads (images of issues) without bogging down the primary database with Base64 strings.
+
+D. Internationalization (i18n)
+- i18next & react-i18next: Provides robust multilingual support across the entire platform, current configured for English, Hindi, Marathi, Tamil, Telugu, and Kannada.
+
+E. Data Visualization & Mapping
+- Recharts: Used within the Analytics dashboards to render insightful charts and graphs (e.g., resolution rates over time).
+- Leaflet & react-leaflet: Integrates interactive maps for pinpointing issue locations. Geographic coordinates are resolved via browser Geolocation API with fallbacks to IP geolocation.
+
+F. Artificial Intelligence
+- Google Generative AI (Gemini): Integrated to analyze complaint descriptions contextually, suggest issue categories, calculate severity scores, and flag potential duplicate reports dynamically.
+
+3. ARCHITECTURAL PATTERN
+------------------------
+CivicPulse follows a serverless, decoupled architecture typical of modern SPAs:
+- Client Tier (React): Handles all rendering, routing, and user interaction. Components are modularized by feature (`src/pages/*`) and layout (`src/components/*`).
+- API Tier (Browser & Fetch): The client communicates directly with third-party REST APIs (Cloudinary, IP Geolocation, OpenStreetMap Nominatim for Reverse Geocoding) and Firebase SDKs.
+- Data Tier (Firebase): Serves as the primary persistence layer, tightly integrated with the Auth context to ensure strict data scoping based on user roles (Citizen vs. Authority).

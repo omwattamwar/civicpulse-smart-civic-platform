@@ -1,0 +1,429 @@
+{
+  "metrics": {
+    "total_samples": 6,
+    "priority_accuracy": 100.0,
+    "class_accuracy": 100.0,
+    "priority_correct": 6,
+    "class_correct": 6,
+    "confusion_matrix": {
+      "high": {
+        "high": 6,
+        "medium": 0,
+        "low": 0,
+        "none": 0
+      },
+      "medium": {
+        "high": 0,
+        "medium": 0,
+        "low": 0,
+        "none": 0
+      },
+      "low": {
+        "high": 0,
+        "medium": 0,
+        "low": 0,
+        "none": 0
+      },
+      "none": {
+        "high": 0,
+        "medium": 0,
+        "low": 0,
+        "none": 0
+      }
+    },
+    "class_metrics": {
+      "severe garbage": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "tp": 2,
+        "fp": 0,
+        "fn": 0
+      },
+      "severe pothole": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "tp": 2,
+        "fp": 0,
+        "fn": 0
+      },
+      "severe water leak": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "tp": 2,
+        "fp": 0,
+        "fn": 0
+      }
+    }
+  },
+  "results": [
+    {
+      "url": "../sample_images/garbage1.png",
+      "description": "Garbage pile on sidewalk",
+      "expected_class": "severe garbage",
+      "expected_priority": "high",
+      "predicted_class": "severe garbage",
+      "predicted_priority": "high",
+      "confidence": 0.9504,
+      "priority_match": true,
+      "class_match": true,
+      "all_detections": [
+        {
+          "class": "severe pothole",
+          "confidence": 0.0001
+        },
+        {
+          "class": "minor road crack",
+          "confidence": 0.0
+        },
+        {
+          "class": "severe garbage",
+          "confidence": 0.9504
+        },
+        {
+          "class": "minor garbage",
+          "confidence": 0.0479
+        },
+        {
+          "class": "broken traffic light",
+          "confidence": 0.0
+        },
+        {
+          "class": "abandoned car",
+          "confidence": 0.0002
+        },
+        {
+          "class": "severe water leak",
+          "confidence": 0.0
+        },
+        {
+          "class": "minor water leak",
+          "confidence": 0.0
+        },
+        {
+          "class": "damaged street sign",
+          "confidence": 0.0
+        },
+        {
+          "class": "graffiti",
+          "confidence": 0.0
+        },
+        {
+          "class": "fallen tree",
+          "confidence": 0.0
+        },
+        {
+          "class": "none",
+          "confidence": 0.0013
+        }
+      ]
+    },
+    {
+      "url": "../sample_images/garbage2.png",
+      "description": "Garbage pile on street",
+      "expected_class": "severe garbage",
+      "expected_priority": "high",
+      "predicted_class": "severe garbage",
+      "predicted_priority": "high",
+      "confidence": 0.9749,
+      "priority_match": true,
+      "class_match": true,
+      "all_detections": [
+        {
+          "class": "severe pothole",
+          "confidence": 0.0001
+        },
+        {
+          "class": "minor road crack",
+          "confidence": 0.0
+        },
+        {
+          "class": "severe garbage",
+          "confidence": 0.9749
+        },
+        {
+          "class": "minor garbage",
+          "confidence": 0.0211
+        },
+        {
+          "class": "broken traffic light",
+          "confidence": 0.0
+        },
+        {
+          "class": "abandoned car",
+          "confidence": 0.0004
+        },
+        {
+          "class": "severe water leak",
+          "confidence": 0.0001
+        },
+        {
+          "class": "minor water leak",
+          "confidence": 0.0
+        },
+        {
+          "class": "damaged street sign",
+          "confidence": 0.0
+        },
+        {
+          "class": "graffiti",
+          "confidence": 0.0
+        },
+        {
+          "class": "fallen tree",
+          "confidence": 0.0
+        },
+        {
+          "class": "none",
+          "confidence": 0.0034
+        }
+      ]
+    },
+    {
+      "url": "../sample_images/road1.jpg",
+      "description": "Severe potholes with standing water",
+      "expected_class": "severe pothole",
+      "expected_priority": "high",
+      "predicted_class": "severe pothole",
+      "predicted_priority": "high",
+      "confidence": 0.7872,
+      "priority_match": true,
+      "class_match": true,
+      "all_detections": [
+        {
+          "class": "severe pothole",
+          "confidence": 0.7872
+        },
+        {
+          "class": "minor road crack",
+          "confidence": 0.2124
+        },
+        {
+          "class": "severe garbage",
+          "confidence": 0.0
+        },
+        {
+          "class": "minor garbage",
+          "confidence": 0.0
+        },
+        {
+          "class": "broken traffic light",
+          "confidence": 0.0
+        },
+        {
+          "class": "abandoned car",
+          "confidence": 0.0001
+        },
+        {
+          "class": "severe water leak",
+          "confidence": 0.0002
+        },
+        {
+          "class": "minor water leak",
+          "confidence": 0.0
+        },
+        {
+          "class": "damaged street sign",
+          "confidence": 0.0
+        },
+        {
+          "class": "graffiti",
+          "confidence": 0.0
+        },
+        {
+          "class": "fallen tree",
+          "confidence": 0.0
+        },
+        {
+          "class": "none",
+          "confidence": 0.0001
+        }
+      ]
+    },
+    {
+      "url": "../sample_images/road2.jpg",
+      "description": "Severely damaged / collapsed road",
+      "expected_class": "severe pothole",
+      "expected_priority": "high",
+      "predicted_class": "severe pothole",
+      "predicted_priority": "high",
+      "confidence": 0.5567,
+      "priority_match": true,
+      "class_match": true,
+      "all_detections": [
+        {
+          "class": "severe pothole",
+          "confidence": 0.5567
+        },
+        {
+          "class": "minor road crack",
+          "confidence": 0.442
+        },
+        {
+          "class": "severe garbage",
+          "confidence": 0.0
+        },
+        {
+          "class": "minor garbage",
+          "confidence": 0.0
+        },
+        {
+          "class": "broken traffic light",
+          "confidence": 0.0
+        },
+        {
+          "class": "abandoned car",
+          "confidence": 0.0
+        },
+        {
+          "class": "severe water leak",
+          "confidence": 0.0009
+        },
+        {
+          "class": "minor water leak",
+          "confidence": 0.0
+        },
+        {
+          "class": "damaged street sign",
+          "confidence": 0.0002
+        },
+        {
+          "class": "graffiti",
+          "confidence": 0.0
+        },
+        {
+          "class": "fallen tree",
+          "confidence": 0.0001
+        },
+        {
+          "class": "none",
+          "confidence": 0.0
+        }
+      ]
+    },
+    {
+      "url": "../sample_images/water_leakage_1.png",
+      "description": "Water pooling on street",
+      "expected_class": "severe water leak",
+      "expected_priority": "high",
+      "predicted_class": "severe water leak",
+      "predicted_priority": "high",
+      "confidence": 0.744,
+      "priority_match": true,
+      "class_match": true,
+      "all_detections": [
+        {
+          "class": "severe pothole",
+          "confidence": 0.107
+        },
+        {
+          "class": "minor road crack",
+          "confidence": 0.1259
+        },
+        {
+          "class": "severe garbage",
+          "confidence": 0.0
+        },
+        {
+          "class": "minor garbage",
+          "confidence": 0.0002
+        },
+        {
+          "class": "broken traffic light",
+          "confidence": 0.0004
+        },
+        {
+          "class": "abandoned car",
+          "confidence": 0.0002
+        },
+        {
+          "class": "severe water leak",
+          "confidence": 0.744
+        },
+        {
+          "class": "minor water leak",
+          "confidence": 0.0147
+        },
+        {
+          "class": "damaged street sign",
+          "confidence": 0.0001
+        },
+        {
+          "class": "graffiti",
+          "confidence": 0.0
+        },
+        {
+          "class": "fallen tree",
+          "confidence": 0.0005
+        },
+        {
+          "class": "none",
+          "confidence": 0.007
+        }
+      ]
+    },
+    {
+      "url": "../sample_images/water_leakage_2.png",
+      "description": "Water flooding on street",
+      "expected_class": "severe water leak",
+      "expected_priority": "high",
+      "predicted_class": "severe water leak",
+      "predicted_priority": "high",
+      "confidence": 0.9674,
+      "priority_match": true,
+      "class_match": true,
+      "all_detections": [
+        {
+          "class": "severe pothole",
+          "confidence": 0.0173
+        },
+        {
+          "class": "minor road crack",
+          "confidence": 0.0107
+        },
+        {
+          "class": "severe garbage",
+          "confidence": 0.0
+        },
+        {
+          "class": "minor garbage",
+          "confidence": 0.0
+        },
+        {
+          "class": "broken traffic light",
+          "confidence": 0.0
+        },
+        {
+          "class": "abandoned car",
+          "confidence": 0.0001
+        },
+        {
+          "class": "severe water leak",
+          "confidence": 0.9674
+        },
+        {
+          "class": "minor water leak",
+          "confidence": 0.0037
+        },
+        {
+          "class": "damaged street sign",
+          "confidence": 0.0
+        },
+        {
+          "class": "graffiti",
+          "confidence": 0.0
+        },
+        {
+          "class": "fallen tree",
+          "confidence": 0.0
+        },
+        {
+          "class": "none",
+          "confidence": 0.0007
+        }
+      ]
+    }
+  ]
+}

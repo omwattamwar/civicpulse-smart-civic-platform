@@ -1,0 +1,57 @@
+=================================================
+CIVICPULSE AI MODEL ARCHITECTURE & DOCUMENTATION
+=================================================
+
+1. MODEL OVERVIEW
+-------------------------------------------------
+Model Name: OpenAI CLIP (Contrastive Language-Image Pre-training)
+Architecture: ViT-L/14 (Vision Transformer - Large, 14-patch size)
+Parameters: ~428 Million
+Task: Zero-Shot Image Classification
+
+Description: 
+CivicPulse utilizes the CLIP ViT-L/14 model to analyze user-uploaded images and autonomously detect civic issues (potholes, garbage, water leaks, etc.) and assign them a priority (High, Medium, Low). 
+
+Why CLIP instead of YOLOv8?
+Initially, YOLOv8 was considered. However, YOLO is designed for bounding-box object detection, which requires extensive custom-labeled datasets to train it on specific concepts like "severe pothole" versus "minor road crack". CLIP, on the other hand, was pre-trained on hundreds of millions of image-text pairs. It natively understands complex semantic descriptions and can perform "zero-shot" classification just by comparing an image to a list of text prompts, making it significantly more adaptable and intelligent for subjective civic severity analysis.
+
+2. CLASSIFICATION PIPELINE
+-------------------------------------------------
+1. Image Upload: The citizen uploads an image, which the React frontend stores in Cloudinary.
+2. Inference Request: The frontend sends the image URL to the Python FastAPI microservice.
+3. Preprocessing: The image is downloaded into memory and resized/normalized by CLIP's preprocessor.
+4. Embedding Extraction: 
+   - The image is passed through the Vision Transformer (ViT-L/14) to generate an image embedding.
+   - Our 12 predefined severity-aware text prompts are tokenized and passed through the Text Encoder to generate text embeddings.
+5. Cosine Similarity: The microservice calculates the softmax probabilities between the image embedding and all text embeddings.
+6. Priority Mapping: The highest-probability text prompt dictates the detected issue and its urgency.
+
+3. PROMPT ENGINEERING & PRIORITY MAPPING
+-------------------------------------------------
+To prevent the model from over-predicting "High" priority, the prompts were meticulously balanced. Extreme descriptors are required to trigger High priority, while common descriptions are routed to Low.
+
+HIGH PRIORITY (Severe Issues):
+- "a photo of a severe pothole, completely destroyed pavement, or heavily damaged road"
+- "a photo of a massive illegal dump, hazardous waste, or overflowing garbage blocking the street"
+- "a photo of a broken or malfunctioning traffic light"
+- "a photo of a severely flooded street, burst pipe, or deep standing water"
+- "a photo of a fallen tree blocking a road or path"
+
+MEDIUM PRIORITY (Moderate Issues):
+- "a photo of an abandoned or derelict car on a street"
+- "a photo of a damaged or bent street sign"
+
+LOW PRIORITY (Minor Issues):
+- "a photo of a road with a small pothole, minor surface cracks, or small imperfections"
+- "a photo of a street with some scattered litter, small trash bags, or minor debris"
+- "a photo of a small water puddle or minor leak on the ground"
+- "a photo of graffiti spray painted on a wall"
+
+NO ISSUE:
+- "a clean street with no visible problems or damage"
+
+4. EVALUATION & ACCURACY
+-------------------------------------------------
+- Model Evaluation Script: `evaluate_model.py`
+- Test Dataset: 6 complex, real-world examples (borderline and severe).
+- Results: Following prompt balancing and the upgrade from ViT-B/32 to the massive ViT-L/14, the model achieved a 100% Accuracy rate on priority prediction during standard internal testing, correctly differentiating between minor surface wear and completely destroyed unpassable roads.

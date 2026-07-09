@@ -1,0 +1,817 @@
+================================================================================
+                    CIVICPULSE – SMART CIVIC INTELLIGENCE PLATFORM
+                         COMPREHENSIVE PROJECT DOCUMENTATION
+================================================================================
+
+
+================================================================================
+1. PROJECT OVERVIEW
+================================================================================
+
+CivicPulse is a full-stack AI-powered civic complaint management platform that
+enables citizens to report municipal issues (potholes, water leaks, garbage, etc.)
+and allows government authorities to manage, track, and resolve these complaints
+efficiently. The platform uses multiple AI systems (Google Gemini NLP + YOLOv8
+Computer Vision) to automatically categorize, prioritize, and analyze reported
+issues.
+
+Project Name     : CivicPulse – Smart Civic Intelligence
+Type             : Full-Stack Web Application + AI Microservice
+Target Users     : Citizens and Municipal/Government Authorities
+Domain           : Smart City / E-Governance / Civic Tech
+
+
+================================================================================
+2. TECHNOLOGY STACK
+================================================================================
+
+----- 2.1 FRONTEND -----
+
+| Technology         | Version   | Purpose                                     |
+|--------------------|-----------|---------------------------------------------|
+| React              | 19.2.4    | Core UI framework (component-based SPA)     |
+| React Router DOM   | 7.13.1    | Client-side routing and navigation          |
+| Vite               | 7.3.1     | Build tool and dev server (HMR)             |
+| Tailwind CSS       | 4.2.1     | Utility-first CSS framework for styling     |
+| Recharts           | 3.8.0     | Data visualization (charts, graphs, pies)   |
+| Lucide React       | 0.577.0   | Icon library (SVG-based)                    |
+| React Hot Toast    | 2.6.0     | Toast notification system                   |
+| i18next            | 25.8.14   | Internationalization (multi-language)       |
+| react-i18next      | 16.5.6    | React bindings for i18next                  |
+| Leaflet            | 1.9.4     | Interactive maps (planned/available)        |
+| React Leaflet      | 5.0.0     | React wrapper for Leaflet maps              |
+
+----- 2.2 BACKEND / CLOUD SERVICES -----
+
+| Technology              | Purpose                                        |
+|-------------------------|------------------------------------------------|
+| Firebase Authentication | User registration, login, session management   |
+| Cloud Firestore         | Real-time NoSQL database for all data          |
+| Firestore Security Rules| Role-based access control (auth required)      |
+| Cloudinary              | Cloud image storage and CDN for complaint media|
+
+----- 2.3 AI / MACHINE LEARNING -----
+
+| Technology              | Purpose                                        |
+|-------------------------|------------------------------------------------|
+| Google Gemini 2.5 Flash | NLP: complaint categorization, priority,       |
+|                         | severity scoring, executive summary generation |
+| YOLOv8s-World           | Computer Vision: zero-shot object detection    |
+|                         | on uploaded complaint images                   |
+| Ultralytics             | YOLO model framework and inference engine      |
+
+----- 2.4 AI MICROSERVICE (PYTHON BACKEND) -----
+
+| Technology         | Purpose                                          |
+|--------------------|--------------------------------------------------|
+| FastAPI            | REST API framework for the AI microservice       |
+| Uvicorn            | ASGI server for FastAPI                          |
+| Firebase Admin SDK | Server-side Firestore access                     |
+| Pillow (PIL)       | Image processing for YOLO inference              |
+| python-dotenv      | Environment variable management                  |
+
+----- 2.5 EXTERNAL APIs -----
+
+| API                        | Purpose                                     |
+|----------------------------|---------------------------------------------|
+| ArcGIS Geocoding API       | Primary reverse geocoding (coordinates to   |
+|                            | human-readable address)                     |
+| Nominatim (OpenStreetMap)  | Fallback reverse geocoding service          |
+| ipapi.co                   | IP-based geolocation fallback when GPS      |
+|                            | is denied                                   |
+| Web Speech API             | Browser-native voice-to-text for complaint  |
+|                            | description input                           |
+
+----- 2.6 DEV TOOLS -----
+
+| Tool               | Purpose                                          |
+|--------------------|--------------------------------------------------|
+| Vite               | Dev server with Hot Module Replacement (HMR)     |
+| @vitejs/plugin-react| React Fast Refresh support                      |
+| @tailwindcss/vite  | Tailwind CSS Vite plugin integration             |
+| npm                | Package manager                                  |
+
+
+================================================================================
+3. SYSTEM ARCHITECTURE
+================================================================================
+
+----- 3.1 HIGH-LEVEL ARCHITECTURE -----
+
+┌─────────────────────────────────────────────────────────────────────┐
+│                          CLIENT (BROWSER)                          │
+│                                                                     │
+│  ┌──────────────┐  ┌───────────────┐  ┌────────────────────────┐   │
+│  │  React SPA   │  │  Tailwind CSS │  │  Recharts (Graphs)     │   │
+│  │  (Vite Dev)  │  │  (Styling)    │  │  Leaflet (Maps)        │   │
+│  └──────┬───────┘  └───────────────┘  └────────────────────────┘   │
+│         │                                                           │
+│  ┌──────┴──────────────────────────────────────────────────────┐    │
+│  │              CONTEXT LAYER (React Context API)              │    │
+│  │  ┌────────────┐  ┌──────────────────┐  ┌────────────────┐  │    │
+│  │  │AuthContext │  │ComplaintContext   │  │NotificationCtx │  │    │
+│  │  │(Auth State)│  │(CRUD + Real-time)│  │(Real-time)     │  │    │
+│  │  └────────────┘  └──────────────────┘  └────────────────┘  │    │
+│  └─────────────────────────┬──────────────────────────────────┘    │
+└─────────────────────────────┼──────────────────────────────────────┘
+                              │
+         ┌────────────────────┼────────────────────┐
+         │                    │                    │
+         ▼                    ▼                    ▼
+┌─────────────────┐  ┌──────────────────┐  ┌──────────────────┐
+│ Firebase Auth   │  │ Cloud Firestore  │  │   Cloudinary     │
+│ (Authentication)│  │ (Database)       │  │ (Image Storage)  │
+│                 │  │                  │  │                  │
+│ - Email/Pass    │  │ - complaints     │  │ - Upload preset  │
+│ - Session mgmt  │  │ - users          │  │ - CDN delivery   │
+│ - onAuthChanged │  │ - notifications  │  │ - Image hosting  │
+└─────────────────┘  └──────────────────┘  └──────────────────┘
+                              │
+                              ▼
+                    ┌──────────────────┐
+                    │  AI Microservice │
+                    │  (FastAPI/Python)│
+                    │                  │
+                    │ - YOLOv8s-World  │
+                    │ - Firebase Admin │
+                    │ - REST APIs      │
+                    │ - Power BI Export│
+                    └──────────────────┘
+                              │
+                              ▼
+                    ┌──────────────────┐
+                    │  Google Gemini   │
+                    │  (NLP Analysis)  │
+                    │                  │
+                    │ - Categorization │
+                    │ - Prioritization │
+                    │ - Severity Score │
+                    │ - AI Summary     │
+                    └──────────────────┘
+
+
+----- 3.2 DATABASE SCHEMA (FIRESTORE COLLECTIONS) -----
+
+Collection: complaints
+├── customId         : string   (e.g., "CIV-001")
+├── title            : string
+├── description      : string
+├── category         : string   (road_damage, water_leakage, garbage, etc.)
+├── priority         : string   (high, medium, low)
+├── status           : string   (submitted, in_progress, resolved, rejected)
+├── location         : map      { lat: number, lng: number, area: string }
+├── latitude         : number   (root-level for geospatial queries)
+├── longitude        : number
+├── areaName         : string
+├── severityScore    : number   (0-100)
+├── aiSeverity       : number   (0.0-1.0)
+├── aiCategory       : string   (AI-predicted category)
+├── aiOverview       : string   (AI-generated executive summary)
+├── ai_detected_issue: string   (YOLO Vision detection result)
+├── ai_confidence    : number   (YOLO confidence score)
+├── ai_priority      : string   (YOLO-derived priority)
+├── citizenId        : string
+├── citizenName      : string
+├── department       : string
+├── assignedTo       : string | null
+├── isDuplicate      : boolean
+├── media            : array    (Cloudinary image URLs)
+├── createdAt        : string   (ISO 8601)
+├── updatedAt        : string   (ISO 8601)
+└── timeline         : array    [{ status, date, note }]
+
+Collection: users
+├── uid              : string   (Firebase Auth UID)
+├── name             : string
+├── email            : string
+├── role             : string   (citizen | authority)
+├── phone            : string
+├── area/department  : string
+├── avatar           : string | null
+└── createdAt        : string
+
+Collection: notifications
+├── userId           : string   (citizen ID or "authority")
+├── title            : string
+├── message          : string
+├── type             : string   (new_complaint | status_update)
+├── complaintId      : string
+├── createdAt        : string
+└── read             : boolean
+
+
+----- 3.3 FIRESTORE SECURITY RULES -----
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write: if request.auth != null;
+    }
+  }
+}
+
+All read/write operations require Firebase Authentication.
+
+
+================================================================================
+4. SYSTEM WORKFLOW
+================================================================================
+
+----- 4.1 CITIZEN COMPLAINT SUBMISSION WORKFLOW -----
+
+Step 1: Citizen opens the "Report Issue" page
+Step 2: GPS auto-fetches current location using:
+        → Browser Geolocation API (primary)
+        → ipapi.co IP-based fallback (if GPS denied)
+Step 3: Reverse geocoding converts coordinates to human-readable address:
+        → ArcGIS Geocoding API (primary)
+        → Nominatim/OpenStreetMap (fallback)
+Step 4: Citizen fills in title and description
+        → Can use voice input via Web Speech API (speech-to-text)
+        → Real-time AI category suggestion as they type (keyword matching)
+Step 5: Citizen optionally selects a category from 10 categories
+Step 6: Citizen optionally uploads images (photos of the issue)
+        → Images uploaded to Cloudinary CDN
+Step 7: Citizen clicks "Submit"
+Step 8: Gemini AI analyzes the complaint text:
+        → Determines category, priority, severity score (0.0-1.0)
+        → Generates an executive summary for authorities
+Step 9: If images were uploaded, the YOLO AI microservice is called:
+        → Downloads the image
+        → Runs YOLOv8s-World zero-shot detection
+        → Detects civic issues (pothole, garbage, broken traffic light, etc.)
+        → Maps detected class to priority level
+        → Updates Firestore with AI vision results
+Step 10: Complaint is saved to Firestore with all AI-enhanced data
+Step 11: A notification is created for the authority
+Step 12: Duplicate detection runs (location + category proximity check)
+Step 13: Success toast shown; citizen redirected to "My Complaints"
+
+
+----- 4.2 AUTHORITY COMPLAINT MANAGEMENT WORKFLOW -----
+
+Step 1: Authority logs into the platform
+Step 2: Dashboard shows real-time stats:
+        → Total, pending, in-progress, resolved, high-priority counts
+        → Monthly complaint trend charts
+        → Priority distribution pie chart
+        → Category breakdown bar chart
+        → Recent complaints table
+Step 3: Authority navigates to "Manage Complaints"
+Step 4: Authority can filter by: search text, status, priority, category, sort
+Step 5: Authority clicks on a complaint to view the full detail modal:
+        → Citizen info, description, location (with Google Maps link)
+        → Attached media/photos
+        → AI Analysis panel:
+           - Severity prediction bar (0-100%)
+           - AI-predicted category
+           - AI Executive Summary (Gemini-generated)
+           - YOLO Vision detection results (if image was uploaded)
+           - Duplicate flag warning
+Step 6: Authority takes action:
+        → Mark as "In Progress" (submitted → in_progress)
+        → Mark as "Resolved" (in_progress → resolved)
+        → "Reject" (if invalid)
+        → "Reopen" (if resolved/rejected needs re-examination)
+        → Change priority (dropdown: high/medium/low)
+        → Delete complaint
+Step 7: Status change triggers:
+        → Firestore update (status, timeline entry)
+        → Notification created for the citizen
+        → Toast confirmation
+
+
+----- 4.3 NOTIFICATION WORKFLOW -----
+
+Trigger 1: Citizen submits complaint → Authority gets "New Complaint" notification
+Trigger 2: Authority changes status → Citizen gets "Complaint Updated" notification
+
+Notifications are:
+  → Stored in Firestore "notifications" collection
+  → Fetched in real-time via onSnapshot listener
+  → Displayed in bell icon dropdown in navbar
+  → Show unread indicator (red dot)
+  → Support mark-as-read and delete actions
+  → Display relative timestamps (2m, 5h, 3d, 1w)
+
+
+----- 4.4 AI PROCESSING PIPELINE -----
+
+                    Complaint Text (title + description)
+                                │
+                                ▼
+                    ┌──────────────────────┐
+                    │   Google Gemini AI   │
+                    │  (gemini-2.5-flash)  │
+                    │                      │
+                    │  Input:  Title +     │
+                    │          Description │
+                    │                      │
+                    │  Output:             │
+                    │  - category          │
+                    │  - priority          │
+                    │  - aiSeverity (0-1)  │
+                    │  - aiOverview (text) │
+                    └──────────────────────┘
+                                │
+                    (If images attached)
+                                │
+                                ▼
+                    ┌──────────────────────┐
+                    │  YOLOv8s-World AI    │
+                    │  (FastAPI Service)   │
+                    │                      │
+                    │  Zero-Shot Classes:  │
+                    │  - pothole           │
+                    │  - cracked road      │
+                    │  - garbage           │
+                    │  - broken traffic    │
+                    │    light             │
+                    │  - abandoned car     │
+                    │  - water leak        │
+                    │  - damaged street    │
+                    │    sign              │
+                    │  - graffiti          │
+                    │  - fallen tree       │
+                    │                      │
+                    │  Output:             │
+                    │  - ai_detected_issue │
+                    │  - ai_confidence     │
+                    │  - ai_priority       │
+                    └──────────────────────┘
+                                │
+                                ▼
+                    ┌──────────────────────┐
+                    │  Priority Mapping    │
+                    │                      │
+                    │  HIGH: pothole,      │
+                    │    cracked road,     │
+                    │    broken traffic    │
+                    │    light, water leak,│
+                    │    fallen tree       │
+                    │  MEDIUM: garbage,    │
+                    │    abandoned car,    │
+                    │    damaged sign      │
+                    │  LOW: graffiti       │
+                    └──────────────────────┘
+
+If Gemini API is unavailable, a keyword-based fallback analysis runs locally.
+
+
+================================================================================
+5. WEBSITE FEATURES
+================================================================================
+
+----- 5.1 LANDING PAGE -----
+
+  • Hero section with gradient animations and glassmorphism design
+  • Feature showcase (6 key features with icons and descriptions)
+  • Platform statistics display (issues reported, resolution rate, etc.)
+  • Call-to-action buttons for citizen registration and authority login
+  • Multi-language selector accessible from landing page
+  • Responsive design for mobile and desktop
+
+----- 5.2 AUTHENTICATION SYSTEM -----
+
+  • Firebase Email/Password authentication
+  • Separate login flow for Citizens and Authorities
+  • User registration with role selection (citizen/authority)
+  • Protected routes with role-based access control:
+    → Citizens can only access citizen routes
+    → Authorities can only access authority routes
+    → Shared routes: Analytics, Profile
+  • Persistent sessions via Firebase onAuthStateChanged
+  • Auto-redirect based on user role after login
+
+----- 5.3 CITIZEN FEATURES -----
+
+  a) Citizen Dashboard
+     - Welcome message with user name
+     - Personal stats: total complaints, submitted, in-progress, resolved
+     - Complaint status bar chart (personal)
+     - Recent complaints list with quick navigation
+     - "Report Issue" quick action button
+
+  b) Report Issue
+     - Title and description input fields
+     - Voice input via Web Speech API (speech-to-text)
+     - Real-time AI category suggestion as user types
+     - 10 category selection grid with icons:
+       Road Damage, Water Leakage, Garbage/Waste, Street Light Issue,
+       Drainage/Sewage, Noise Pollution, Illegal Construction,
+       Traffic Issue, Public Safety, Park Maintenance
+     - Image upload to Cloudinary (multiple photos supported)
+     - Auto GPS location detection with reverse geocoding
+     - Location display with manual refresh option
+     - AI-powered submission (Gemini analysis + optional YOLO vision)
+
+  c) My Complaints
+     - Full list of user's own complaints
+     - Search, filter by status/priority, and sort functionality
+     - Complaint cards with status badges and priority indicators
+     - Click to view full complaint detail
+
+  d) Complaint Detail
+     - Full complaint information display
+     - Attached media gallery
+     - Category and location details (with Google Maps link)
+     - Department assignment info
+     - AI Insights panel:
+       → Severity prediction bar (0-100%)
+       → AI-predicted category match
+       → Duplicate status flag
+       → YOLO Vision detection results (if applicable)
+     - Status timeline with chronological history
+
+----- 5.4 AUTHORITY FEATURES -----
+
+  a) Authority Dashboard
+     - City-wide stats: total, pending, in-progress, resolved, high-priority
+     - Average resolution time calculation
+     - Month-over-month trend percentages
+     - Complaint trends line chart (last 7 months)
+     - Priority distribution donut chart
+     - Complaints by category horizontal bar chart
+     - Recent complaints table with status/priority badges
+
+  b) Manage Complaints
+     - Full tabular view of ALL complaints in the system
+     - Multi-filter: search, status, priority, category, sort order
+     - Sort options: newest, oldest, priority, AI severity
+     - Inline priority change (dropdown in table row)
+     - Quick action buttons per row:
+       → Start progress, resolve, reject, reopen, delete
+     - Full detail modal on click:
+       → Description, citizen info, location with Google Maps link
+       → Attached media gallery
+       → AI Analysis panel (severity bar, category, executive summary,
+          YOLO vision results, duplicate warning)
+       → Quick action buttons for status changes
+
+  c) Department Overview
+     - Performance metrics for 8 departments:
+       Public Works, Water Supply, Sanitation, Electrical,
+       Drainage, Environment, Urban Planning, Traffic Police
+     - Complaints vs Resolved grouped bar chart
+     - Department cards with: total, resolved, avg resolution time
+     - Color-coded resolution rate badges
+     - Progress bars per department
+
+----- 5.5 SHARED FEATURES -----
+
+  a) Analytics Dashboard
+     - Available to both citizens and authorities
+     - Time range filter: 7 days, 30 days, 6 months, 1 year
+     - Summary cards: total complaints, resolution rate, avg response time,
+       hotspot area count
+     - Complaint trends area chart (filtered by time range)
+     - Area-wise distribution bar chart
+     - Category breakdown donut chart
+     - Performance summary with resolution rate bars by priority level
+     - All data derived from real Firestore complaints (no mock data)
+
+  b) Profile Settings
+     - Profile avatar (initial letter gradient)
+     - Editable fields: name, phone, area (citizen) / department (authority)
+     - Non-editable: email
+     - Account info: user ID, member since date, role badge
+     - Save to Firestore with real-time update
+
+  c) Notification System
+     - Real-time notifications via Firestore onSnapshot
+     - Bell icon with unread indicator (red dot)
+     - Dropdown panel with notification list
+     - Relative timestamps (2m, 5h, 3d, 1w)
+     - Mark as read on click
+     - Delete individual notifications
+     - Notification types:
+       → "New Complaint" (for authorities)
+       → "Complaint Updated" (for citizens)
+
+  d) Multi-Language Support (i18n)
+     - 6 languages supported:
+       → English (en)
+       → Hindi (हिंदी)
+       → Marathi (मराठी)
+       → Tamil (தமிழ்)
+       → Telugu (తెలుగు)
+       → Kannada (ಕನ್ನಡ)
+     - Language selector in navbar and landing page
+     - All UI text translated (labels, buttons, messages, categories)
+     - Powered by i18next with static JSON translation files
+
+  e) Responsive Design
+     - Fully responsive across mobile, tablet, and desktop
+     - Mobile hamburger menu for navigation
+     - Dark theme with glassmorphism UI
+     - Gradient accents and micro-animations
+     - Custom scrollbar styling
+
+
+================================================================================
+6. PROJECT FILE STRUCTURE
+================================================================================
+
+CivicPulse/
+├── index.html                          # Entry HTML file
+├── package.json                        # NPM dependencies and scripts
+├── vite.config.js                      # Vite build configuration
+├── firebase.json                       # Firebase project config
+├── firestore.rules                     # Firestore security rules
+├── .env                                # Environment variables (Gemini API key)
+│
+├── src/
+│   ├── main.jsx                        # React app entry point
+│   ├── App.jsx                         # Root component with routing
+│   ├── index.css                       # Global styles and Tailwind config
+│   │
+│   ├── lib/
+│   │   ├── firebase.js                 # Firebase SDK initialization
+│   │   ├── gemini.js                   # Google Gemini AI integration
+│   │   ├── analytics.js               # Geospatial data helpers (heatmap, area stats)
+│   │   └── i18n.js                     # i18next initialization
+│   │
+│   ├── context/
+│   │   ├── AuthContext.jsx             # Authentication state management
+│   │   ├── ComplaintContext.jsx         # Complaint CRUD + real-time sync
+│   │   └── NotificationContext.jsx     # Notification state management
+│   │
+│   ├── data/
+│   │   └── mockData.js                 # Categories, departments, statuses, priorities
+│   │
+│   ├── locales/
+│   │   ├── en.json                     # English translations
+│   │   ├── hi.json                     # Hindi translations
+│   │   ├── mr.json                     # Marathi translations
+│   │   ├── ta.json                     # Tamil translations
+│   │   ├── te.json                     # Telugu translations
+│   │   └── kn.json                     # Kannada translations
+│   │
+│   ├── components/
+│   │   └── layout/
+│   │       ├── DashboardLayout.jsx     # Dashboard shell (Navbar + content)
+│   │       └── Navbar.jsx              # Navigation bar with notifications
+│   │
+│   └── pages/
+│       ├── Landing.jsx                 # Public landing/home page
+│       ├── Profile.jsx                 # User profile settings
+│       ├── NotFound.jsx                # 404 error page
+│       │
+│       ├── auth/
+│       │   ├── Login.jsx               # Login page (citizen/authority)
+│       │   └── Register.jsx            # Registration page
+│       │
+│       ├── citizen/
+│       │   ├── CitizenDashboard.jsx    # Citizen's personal dashboard
+│       │   ├── ReportIssue.jsx         # Complaint submission form
+│       │   ├── MyComplaints.jsx        # User's complaint list
+│       │   └── ComplaintDetail.jsx     # Individual complaint view
+│       │
+│       ├── authority/
+│       │   ├── AuthorityDashboard.jsx  # Authority overview dashboard
+│       │   ├── ManageComplaints.jsx    # Complaint management table + modal
+│       │   └── DepartmentOverview.jsx  # Department performance metrics
+│       │
+│       └── analytics/
+│           └── AnalyticsDashboard.jsx  # Data analytics and visualizations
+│
+├── ai-microservice/
+│   ├── main.py                         # FastAPI server (YOLO + Power BI export)
+│   ├── requirements.txt                # Python dependencies
+│   ├── firebase_config.json            # Firebase Admin SDK credentials
+│   ├── yolov8s-world.pt                # YOLOv8s-World model weights (~27MB)
+│   ├── yolov8n.pt                      # YOLOv8 Nano model weights (~6.5MB)
+│   ├── .env                            # Python environment variables
+│   ├── test_model.py                   # YOLO model test script
+│   └── test_db.py                      # Firebase connection test script
+│
+└── dist/                               # Production build output
+
+
+================================================================================
+7. AI MICROSERVICE API ENDPOINTS
+================================================================================
+
+Base URL: http://localhost:8000
+
+----- POST /api/predict_priority -----
+Purpose  : Analyze a complaint image using YOLOv8s-World for issue detection
+Request  : { "image_url": "https://...", "complaint_id": "CIV-001" }
+Response : {
+    "status": "success",
+    "prediction": {
+        "ai_detected_issue": "Pothole",
+        "ai_priority": "High",
+        "ai_confidence": 0.87,
+        "ai_details": "pothole (0.87)"
+    }
+}
+Side Effect: Updates the complaint document in Firestore with AI results
+
+----- GET /api/export/complaints -----
+Purpose  : Export cleaned complaint data as JSON (for Power BI integration)
+Auth     : Requires X-API-KEY header
+Params   : fromDate, toDate, category, status (all optional filters)
+Features : Duplicate removal, null coordinate filtering, geospatial extraction
+
+----- GET /api/export/complaints/csv -----
+Purpose  : Export cleaned complaint data as CSV file download
+Auth     : Requires X-API-KEY header
+Params   : Same as JSON export
+Response : Streaming CSV file with proper headers
+
+
+================================================================================
+8. ROUTING STRUCTURE
+================================================================================
+
+PUBLIC ROUTES:
+  /                     → Landing page
+  /login                → Login page (supports ?role=authority query param)
+  /register             → Registration page
+
+CITIZEN ROUTES (Protected - role: citizen):
+  /citizen/dashboard    → Citizen Dashboard
+  /citizen/report       → Report Issue form
+  /citizen/complaints   → My Complaints list
+  /citizen/complaints/:id → Complaint Detail view
+
+AUTHORITY ROUTES (Protected - role: authority):
+  /authority/dashboard  → Authority Dashboard
+  /authority/complaints → Manage Complaints table
+  /authority/departments→ Department Overview
+
+SHARED AUTHENTICATED ROUTES:
+  /analytics            → Analytics Dashboard (both roles)
+  /profile              → Profile Settings (both roles)
+
+  *                     → 404 Not Found page
+
+
+================================================================================
+9. KEY DESIGN PATTERNS & IMPLEMENTATION DETAILS
+================================================================================
+
+----- 9.1 STATE MANAGEMENT -----
+  • React Context API for global state (no Redux/Zustand)
+  • Three context providers wrapping the app:
+    → AuthProvider: user session, login, register, logout, profile update
+    → ComplaintProvider: complaint CRUD, real-time sync, stats computation
+    → NotificationProvider: real-time notification listener, read/delete
+
+----- 9.2 REAL-TIME DATA -----
+  • Firestore onSnapshot listeners for complaints and notifications
+  • Any change in Firestore (add/update/delete) instantly reflects in the UI
+  • No need to refresh the page or re-fetch data manually
+
+----- 9.3 GEOLOCATION STRATEGY -----
+  Three-tier location detection with robust fallbacks:
+  1. Browser Geolocation API (GPS/WiFi) → most accurate
+  2. IP-based geolocation via ipapi.co → moderate accuracy
+  3. Default coordinates (New Delhi) → last resort
+
+  Two-tier reverse geocoding:
+  1. ArcGIS Geocoding API → primary (detailed addresses)
+  2. Nominatim/OpenStreetMap → fallback (open-source)
+
+----- 9.4 AI FALLBACK STRATEGY -----
+  If Gemini API fails or key is missing:
+  → Local keyword-based categorization runs (text matching)
+  → Default priority assigned based on keyword urgency
+  → Fallback overview message generated
+
+  If YOLO microservice is unavailable:
+  → Complaint saved without vision analysis
+  → Only Gemini NLP results are used
+
+----- 9.5 DUPLICATE DETECTION -----
+  Proximity-based duplicate check:
+  → Compares new complaint's description keywords against existing complaints
+  → Checks if location is within ~0.005 degrees (~500m) of existing complaint
+  → If both category keyword and location match → flagged as potential duplicate
+  → Visual warning shown to citizen and flagged for authority review
+
+----- 9.6 UI/UX DESIGN -----
+  • Dark theme with glassmorphism (backdrop-blur, semi-transparent cards)
+  • Gradient accents (primary blue → secondary purple → accent green)
+  • Smooth animations: fade-in, scale, transitions
+  • Responsive grid layouts adapting to screen sizes
+  • Status badges: color-coded (submitted=blue, in_progress=yellow,
+    resolved=green, rejected=red)
+  • Priority badges: color-coded (high=red, medium=yellow, low=green)
+
+
+================================================================================
+10. COMPLAINT CATEGORIES & DEPARTMENT ROUTING
+================================================================================
+
+| Category               | Department         | Icon  |
+|------------------------|--------------------|-------|
+| Road Damage            | Public Works       |  🛣️  |
+| Water Leakage          | Water Supply       |  💧  |
+| Garbage / Waste        | Sanitation         |  🗑️  |
+| Street Light Issue     | Electrical         |  💡  |
+| Drainage / Sewage      | Drainage           |  🚰  |
+| Noise Pollution        | Environment        |  🔊  |
+| Illegal Construction   | Urban Planning     |  🏗️  |
+| Traffic Issue          | Traffic Police     |  🚦  |
+| Public Safety          | Public Safety      |  🛡️  |
+| Park Maintenance       | Parks & Recreation |  🌳  |
+
+
+================================================================================
+11. COMPLAINT LIFECYCLE / STATUS FLOW
+================================================================================
+
+┌───────────┐     ┌──────────────┐     ┌───────────┐
+│ SUBMITTED │ ──→ │ IN PROGRESS  │ ──→ │ RESOLVED  │
+└───────────┘     └──────────────┘     └───────────┘
+      │                  │                    │
+      │                  │                    │
+      ▼                  ▼                    ▼
+┌───────────┐     ┌──────────────┐     ┌───────────┐
+│ REJECTED  │     │   REJECTED   │     │ REOPENED  │
+└───────────┘     └──────────────┘     │(→SUBMITTED│
+                                       └───────────┘
+
+Each status transition:
+  → Updates the complaint document in Firestore
+  → Adds a timeline entry with timestamp and optional note
+  → Creates a notification for the citizen
+  → Shows a toast confirmation to the authority
+
+
+================================================================================
+12. HOW TO RUN THE PROJECT
+================================================================================
+
+----- 12.1 FRONTEND (React + Vite) -----
+
+  1. Navigate to project root:
+     cd CivicPulse
+
+  2. Install dependencies:
+     npm install
+
+  3. Create .env file with:
+     VITE_GEMINI_API_KEY=<your-google-gemini-api-key>
+
+  4. Start development server:
+     npm run dev
+
+  5. Open in browser:
+     http://localhost:5173
+
+----- 12.2 AI MICROSERVICE (Python/FastAPI) -----
+
+  1. Navigate to microservice directory:
+     cd ai-microservice
+
+  2. Create virtual environment:
+     python -m venv venv
+     venv\Scripts\activate       (Windows)
+
+  3. Install dependencies:
+     pip install -r requirements.txt
+
+  4. Ensure firebase_config.json (Firebase Admin SDK key) is present
+
+  5. Start the server:
+     python main.py
+     (Runs on http://localhost:8000)
+
+----- 12.3 PRODUCTION BUILD -----
+
+  npm run build     → Outputs to /dist folder
+  npm run preview   → Preview production build locally
+
+
+================================================================================
+13. POWER BI INTEGRATION
+================================================================================
+
+The AI microservice includes Power BI export endpoints for advanced analytics:
+
+  • JSON Export: GET /api/export/complaints
+    → Returns cleaned, deduplicated complaint data
+    → Supports date range, category, and status filters
+    → Geospatial fields extracted for map visualizations
+    → Protected by API key authentication
+
+  • CSV Export: GET /api/export/complaints/csv
+    → Streaming CSV download for direct import into Power BI
+    → Same filtering and cleaning as JSON endpoint
+
+Data Cleaning Pipeline:
+  1. Remove duplicate-flagged complaints
+  2. Remove document ID duplicates
+  3. Apply date range filters
+  4. Extract and validate geospatial coordinates
+  5. Normalize area names and severity scores
+  6. Map to clean, consistent schema
+
+
+================================================================================
+                               END OF DOCUMENTATION
+================================================================================
