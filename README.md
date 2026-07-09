@@ -289,6 +289,6 @@ _Developer & Maintainer_
 
 &nbsp;
 
-_Developed with ❤️ for smarter, cleaner cities._
+_Developed with  for smarter, cleaner cities._
 
 </div>
