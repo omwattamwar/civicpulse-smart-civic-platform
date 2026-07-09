@@ -214,11 +214,14 @@ python main.py
 
 ---
 
-## 📸 Screenshots
+## 📸 Architecture & Tech Stack
 
-| Citizen Dashboard | Authority Dashboard | Report Issue View |
-| :---: | :---: | :---: |
-| <img src="assets/citizen-dashboard.png" width="300"/> | <img src="assets/authority-dashboard.png" width="300"/> | <img src="assets/report-issue.png" width="300"/> |
+<div align="center">
+  <img src="assets/design-architecture.png" alt="Design-System Architecture" width="100%" />
+  <br/>
+  <br/>
+  <img src="assets/tech-stack.png" alt="Tech Stack" width="100%" />
+</div>
 
 ---
 
