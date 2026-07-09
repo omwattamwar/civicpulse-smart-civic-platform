@@ -1,4 +1,6 @@
-# CivicPulse: AI-Powered Civic Complaint Management System
+# 🏛️ CivicPulse: AI-Powered Civic Complaint Management System
+
+> **"Empowering Smart Cities Through AI-Driven Civic Intelligence."**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![React](https://img.shields.io/badge/React-19.2-blue.svg)](https://reactjs.org/)
@@ -6,144 +8,272 @@
 [![Firebase](https://img.shields.io/badge/Firebase-12.10-orange.svg)](https://firebase.google.com/)
 [![Python](https://img.shields.io/badge/Python-FastAPI-green.svg)](https://fastapi.tiangolo.com/)
 
-## Table of Contents
-1. [Project Overview](#project-overview)
-2. [Problem Statement & Solution](#problem-statement--solution)
-3. [Design-System Architecture](#design-system-architecture)
-4. [Tech Stack](#tech-stack)
-5. [Key Features](#key-features)
-6. [Installation & Setup](#installation--setup)
-7. [Documentation](#documentation)
-8. [Screenshots](#screenshots)
-9. [License](#license)
+<div align="center">
+  <img src="assets/banner.png" alt="CivicPulse Banner" width="100%" />
+</div>
+
+<br/>
+
+CivicPulse is an AI-powered Civic Complaint Management System that enables citizens to report civic issues, intelligently classifies complaints using Artificial Intelligence, prioritizes requests based on severity, routes them to the appropriate government department, and provides real-time complaint tracking with analytics dashboards for smarter urban governance.
 
 ---
 
-## Project Overview
-CivicPulse is an enterprise-grade, full-stack civic complaint management platform designed to facilitate seamless communication between citizens and municipal authorities. It integrates advanced Artificial Intelligence (Natural Language Processing and Computer Vision) to automate the triage, categorization, and prioritization of reported civic issues.
+## 📑 Table of Contents
+<details>
+<summary>Click to expand</summary>
 
-## Problem Statement & Solution
-**Problem:** Municipal authorities often struggle with a high volume of unstructured, miscategorized, and unverified civic complaints, leading to slow response times and inefficient resource allocation.
+1. [Project Overview](#-project-overview)
+2. [Problem & Solution](#-problem--solution)
+3. [Key Features](#-key-features)
+4. [Technology Stack](#-technology-stack)
+5. [System Architecture](#-system-architecture)
+6. [Workflows & Diagrams](#-workflows--diagrams)
+7. [Project Structure](#-project-structure)
+8. [Installation & Setup](#-installation--setup)
+9. [Screenshots](#-screenshots)
+10. [Challenges & Learnings](#-challenges--learnings)
+11. [Contributing](#-contributing)
+12. [License](#-license)
 
-**Solution:** CivicPulse introduces an automated triage system. By utilizing Google Gemini for semantic text analysis and YOLOv8s for zero-shot image verification, the platform accurately classifies complaints, detects duplicate reports, and assigns severity scores before they even reach a human operator.
-
----
-
-## Design-System Architecture
-
-The application relies on a robust, decoupled architecture connecting Citizen workflows to Authority management through a central Firebase and AI processing layer.
-
-### 1. Citizen Interface
-- **Register / Login:** Secure authentication entry point.
-- **Submit Complaint:** Input form supporting text, image, and location data.
-- **Track Complaint:** Check real-time resolution status.
-- **Receive Updates:** Automated status notifications.
-
-### 2. Web Application (Frontend)
-- **React.js & Tailwind CSS:** Core UI framework and styling.
-- **Charts & Analytics:** Integrated via Recharts / Chart.js for data visualization.
-- **Maps & Location:** Geolocation interfaces built with Leaflet.
-
-### 3. Backend & Database (Firebase)
-- **Firebase Authentication:** Secure User Management (Email/Password).
-- **Cloud Firestore:** Centralized database for Complaints, Users, Notifications, and Status.
-- **Cloudinary:** Dedicated Image Upload & CDN Storage.
-
-### 4. AI Processing Layer
-- **NLP – Google Gemini API:**
-  - Complaint Categorization
-  - Priority Prediction
-  - Severity Analysis
-  - Summary Generation
-- **CV – YOLOv8 Object Detection:**
-  - Image Analysis
-  - Object / Issue Detection
-  - Category Mapping
-  - Confidence Score Computation
-
-### 5. Authority Interface
-- **Dashboard Overview:** Macro-level view of Total Complaints, Status, and Analytics.
-- **View Complaints:** Detailed filtering, search, and granular issue details.
-- **Update Status:** Mark issues as In Progress, Resolved, or Rejected.
-- **Analytics & Reports:** Detailed Charts, Trends, and Statistical breakdowns.
-- **Notifications:** Real-time operational alerts.
-
-### 6. External Services
-- **Geoapify API & OpenStreetMap (Nominatim):** Primary and fallback Reverse Geocoding.
-- **IPAPI:** IP-based Geolocation fallback.
-- **Google Gemini API & YOLOv8 Model Server:** Dedicated microservices for NLP and Image Analysis.
-
-### System Workflow
-`Citizen Submits Complaint` ➔ `AI Processes Complaint` ➔ `Stored in Firestore` ➔ `Authority Reviews` ➔ `Status Updated` ➔ `Citizen Notified`
+</details>
 
 ---
 
-## Tech Stack
+## 🎯 Project Overview
 
-Our technology stack is systematically divided into 6 specialized domains:
+CivicPulse acts as a digital bridge between citizens and municipal authorities. By leveraging **Natural Language Processing (Google Gemini)** and **Computer Vision (YOLOv8)**, it eliminates the manual triage of civic complaints (e.g., potholes, waste accumulation, water leakage), ensuring resources are deployed rapidly and efficiently.
 
-| Domain | Technologies Utilized | Purpose |
-| :--- | :--- | :--- |
-| **1. Frontend** | React.js, Tailwind CSS, HTML5, CSS3, JavaScript, React Router DOM, Lucide React, Recharts, i18next, Leaflet | Core UI Library, Styling, Routing, Icons, Charting, Internationalization, and Mapping. |
-| **2. Backend / Database / Cloud** | Firebase Authentication, Cloud Firestore, Cloudinary | User Authentication, Real-time Database sync, Image Storage & CDN. |
-| **3. AI / Machine Learning** | Google Gemini API, YOLOv8 | NLP (Categorization, Priority, Summary) and Object Detection for Civic Issues. |
-| **4. Visualization & Analytics** | Chart.js / Recharts, Power BI | Interactive Charts, Dashboards & Business Insights. |
-| **5. External APIs** | Geoapify API, OpenStreetMap, ipapi.co, Cloudinary API, Web Speech API | Geocoding, Reverse Geocoding, IP Geolocation, Image Management, Voice-to-Text Input. |
-| **6. Tools & Platforms** | Vite, VS Code, GitHub, npm, Postman, Figma | Build Tool, Code Editor, Version Control, Package Manager, API Testing, UI/UX Design. |
+### 🛑 Problem Statement
+Municipal authorities struggle with a high volume of unstructured, miscategorized, and unverified civic complaints. This leads to slow response times, duplicate reports, and inefficient resource allocation.
 
-**Stack Overview Data Flow:**
-`Users` ➔ `Frontend` ➔ `Backend` ➔ `AI/ML Processing` ➔ `Analytics & Dashboard` ➔ `Real-time Notifications`
+### ✅ Solution
+CivicPulse introduces an **automated AI triage system**. It uses Gemini for semantic text analysis and YOLOv8s for zero-shot image verification to accurately classify complaints, detect duplicates, and assign severity scores before they ever reach a human operator.
 
 ---
 
-## Key Features
-- **Role-Based Access Control (RBAC):** Distinct interfaces and permissions for Citizens and Government Authorities.
-- **Automated AI Triage:** Real-time extraction of categories, priority levels, and executive summaries from unstructured text.
-- **Zero-Shot Object Detection:** Image verification using YOLO to independently identify civic issues.
-- **Geospatial Intelligence:** Automated coordinate extraction and reverse geocoding via ArcGIS and Nominatim.
-- **Analytics Dashboards:** Comprehensive data visualization for tracking resolution metrics and geographical complaint hotspots.
+## ✨ Key Features
+
+| Category | Features |
+| :--- | :--- |
+| **🔐 Authentication** | Role-Based Access Control (RBAC) for Citizens and Authorities. |
+| **📝 Issue Reporting** | Complaint registration with Image Upload and Geo Location (Geoapify). |
+| **🧠 AI Intelligence** | NLP Classification, Priority Detection, and Visual verification via YOLOv8. |
+| **🏢 Management** | Automated Department Assignment and comprehensive Authority Dashboards. |
+| **📊 Analytics** | Citizen Dashboards, Real-Time Tracking, and Power BI-style visualizations. |
+| **🌐 UX/UI** | Dark Mode, Responsive Design, Multi-language support, and Real-Time Updates. |
 
 ---
 
-## Installation & Setup
+## 🛠️ Technology Stack
 
-### Prerequisites
-- Node.js (v18.x+)
-- Python (v3.10+)
-- Firebase Account
-- Google Gemini API Key
+<details>
+<summary><strong>View Detailed Stack</strong></summary>
 
-### Frontend Initialization
+- **Frontend:** React 19, Vite, Tailwind CSS 4, React Router DOM, Recharts, Leaflet, i18next.
+- **Backend/Database:** Firebase Authentication, Cloud Firestore, Cloudinary.
+- **AI/ML:** Google Gemini 2.5 API (NLP), YOLOv8 (Computer Vision).
+- **APIs:** Geoapify API, OpenStreetMap, IPAPI, Web Speech API.
+- **Tools:** GitHub, npm, Vite, VS Code.
+
+</details>
+
+---
+
+## 🏗️ System Architecture
+
+```mermaid
+graph TD
+    A[Citizen App] -->|Auth| B(Firebase Auth)
+    A -->|Data| C[(Cloud Firestore)]
+    A -->|Images| D[Cloudinary]
+    
+    C <--> E[Python FastAPI Microservice]
+    E -->|Text Analysis| F[Google Gemini API]
+    E -->|Vision Detection| G[YOLOv8 Model]
+    
+    H[Authority Dashboard] -->|Reads| C
+```
+
+---
+
+## 🔄 Workflows & Diagrams
+
+<details>
+<summary><strong>1. Application Workflow</strong></summary>
+
+```mermaid
+flowchart LR
+    Start([User Visits App]) --> Auth{Is Logged In?}
+    Auth -- No --> Login[Login/Register]
+    Auth -- Yes --> Role{Role?}
+    Role -- Citizen --> CD[Citizen Dashboard]
+    Role -- Authority --> AD[Authority Dashboard]
+```
+</details>
+
+<details>
+<summary><strong>2. Citizen Complaint Workflow</strong></summary>
+
+```mermaid
+sequenceDiagram
+    participant Citizen
+    participant App
+    participant AI
+    participant DB
+    
+    Citizen->>App: Submits Form (Text + Image + Location)
+    App->>AI: Sends data for Triage
+    AI-->>App: Returns Category & Priority
+    App->>DB: Saves structured complaint
+    DB-->>App: Confirmation
+    App-->>Citizen: Complaint ID Generated
+```
+</details>
+
+<details>
+<summary><strong>3. Authority Workflow</strong></summary>
+
+```mermaid
+flowchart TD
+    A[Authority Login] --> B[View Dashboard Analytics]
+    B --> C[Filter Complaints by Department]
+    C --> D[Select High-Priority Issue]
+    D --> E[Update Status: In Progress]
+    E --> F[Update Status: Resolved]
+```
+</details>
+
+<details>
+<summary><strong>4. Complaint Processing Flow</strong></summary>
+
+```mermaid
+stateDiagram-v2
+    [*] --> Submitted
+    Submitted --> AI_Triage
+    AI_Triage --> Pending_Review
+    Pending_Review --> In_Progress
+    In_Progress --> Resolved
+    In_Progress --> Rejected
+    Resolved --> [*]
+    Rejected --> [*]
+```
+</details>
+
+<details>
+<summary><strong>5. AI Classification Workflow</strong></summary>
+
+```mermaid
+flowchart TD
+    Input[Raw Complaint Data] --> Split{Data Type}
+    Split -->|Text| NLP[Gemini: Categorize & Summarize]
+    Split -->|Image| CV[YOLOv8: Detect Objects]
+    NLP --> Merge[Aggregate Confidence]
+    CV --> Merge
+    Merge --> Output[Final Severity Score]
+```
+</details>
+
+<details>
+<summary><strong>6. Authentication Flow</strong></summary>
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant Firebase
+    participant Firestore
+    
+    User->>Firebase: Email & Password
+    Firebase-->>User: JWT Token
+    User->>Firestore: Request User Profile (Role)
+    Firestore-->>User: Role Data (Citizen/Authority)
+```
+</details>
+
+<details>
+<summary><strong>7. Database Relationship Diagram</strong></summary>
+
+```mermaid
+erDiagram
+    USERS ||--o{ COMPLAINTS : submits
+    USERS {
+        string uid PK
+        string role
+        string email
+    }
+    COMPLAINTS ||--o{ NOTIFICATIONS : triggers
+    COMPLAINTS {
+        string id PK
+        string title
+        string status
+        string ai_priority
+    }
+```
+</details>
+
+<details>
+<summary><strong>8. Deployment Workflow</strong></summary>
+
+```mermaid
+flowchart LR
+    Dev[Developer Commits Code] --> GitHub[GitHub Repository]
+    GitHub -->|CI/CD Actions| Build[Vite Build]
+    Build --> Deploy[Firebase Hosting / Vercel]
+```
+</details>
+
+---
+
+## 📂 Project Structure
+
+```mermaid
+graph TD
+    Root[civicpulse-smart-civic-platform/]
+    Root --> Src[src/]
+    Root --> AI[ai-microservice/]
+    Root --> Docs[docs/]
+    Root --> Assets[assets/]
+    
+    Src --> Comps[components/]
+    Src --> Pages[pages/]
+    Src --> Context[context/]
+    
+    AI --> Main[main.py]
+    AI --> Models[YOLO models]
+```
+
+---
+
+## 🚀 Installation & Setup
+
+> **Note:** Ensure you have Node.js 18+ and Python 3.10+ installed.
+
+### 1. Clone the Repository
 ```bash
 git clone https://github.com/your-username/civicpulse-smart-civic-platform.git
 cd civicpulse-smart-civic-platform
+```
+
+### 2. Frontend Setup
+```bash
 npm install
 npm run dev
 ```
 
-### Microservice Initialization
+### 3. AI Microservice Setup
 ```bash
 cd ai-microservice
 python -m venv venv
-venv\Scripts\activate   # Windows
+# Windows: venv\Scripts\activate | Mac/Linux: source venv/bin/activate
 pip install -r requirements.txt
 python main.py
 ```
 
----
-
-## Documentation
-For comprehensive details regarding deployment and architecture, please refer to the `docs/` directory:
-- [Architecture Guide](docs/Architecture_Guide.md)
-- [Installation Guide](docs/Installation_Guide.md)
-- [Environment Variables](docs/Environment_Variables.md)
-- [Developer Guide](docs/Developer_Guide.md)
-- [Deployment Guide](docs/Deployment_Guide.md)
-- [FAQ & Troubleshooting](docs/FAQ_and_Troubleshooting.md)
+### 4. Environment Variables
+Create a `.env` file in the root directory. Refer to `docs/Environment_Variables.md` for the template configuration for Firebase, Gemini, and Geoapify.
 
 ---
 
-## Screenshots
+## 📸 Screenshots
 
 | Citizen Interface | Authority Interface | Issue Reporting |
 | :---: | :---: | :---: |
@@ -151,5 +281,26 @@ For comprehensive details regarding deployment and architecture, please refer to
 
 ---
 
-## License
-This software is licensed under the [MIT License](LICENSE).
+## 💡 Challenges & Learnings
+
+### Challenges Faced
+- **AI Latency:** Balancing real-time UI updates with the processing time required by YOLOv8 and the Gemini API.
+- **Geospatial Accuracy:** Handling edge cases where reverse geocoding APIs (Nominatim) returned inaccurate granular data.
+
+### Learning Outcomes
+- Mastered the integration of Python microservices with React frontends.
+- Developed a deep understanding of Firebase security rules and role-based access architectures.
+
+---
+
+## 🤝 Contributing
+Contributions are welcome! Please check out the [Contributing Guide](CONTRIBUTING.md) and [Code of Conduct](CODE_OF_CONDUCT.md) for more details.
+
+---
+
+## 📄 License
+This project is licensed under the [MIT License](LICENSE).
+
+<div align="center">
+  <i>Developed with ❤️ for smarter, cleaner cities.</i>
+</div>
