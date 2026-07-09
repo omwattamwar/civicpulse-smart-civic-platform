@@ -9,14 +9,13 @@
 ## Table of Contents
 1. [Project Overview](#project-overview)
 2. [Problem Statement & Solution](#problem-statement--solution)
-3. [System Architecture](#system-architecture)
-4. [Technology Stack](#technology-stack)
+3. [Design-System Architecture](#design-system-architecture)
+4. [Tech Stack](#tech-stack)
 5. [Key Features](#key-features)
-6. [AI Integration Pipeline](#ai-integration-pipeline)
-7. [Installation & Setup](#installation--setup)
-8. [Documentation](#documentation)
-9. [Screenshots](#screenshots)
-10. [License](#license)
+6. [Installation & Setup](#installation--setup)
+7. [Documentation](#documentation)
+8. [Screenshots](#screenshots)
+9. [License](#license)
 
 ---
 
@@ -30,69 +29,79 @@ CivicPulse is an enterprise-grade, full-stack civic complaint management platfor
 
 ---
 
-## System Architecture
+## Design-System Architecture
 
-The application is structured into decoupled layers, ensuring scalability and separation of concerns.
+The application relies on a robust, decoupled architecture connecting Citizen workflows to Authority management through a central Firebase and AI processing layer.
 
-```mermaid
-graph TD
-    Client[React SPA] -->|Auth & Session| Firebase_Auth[Firebase Authentication]
-    Client -->|Data Sync| Firestore[(Cloud Firestore)]
-    Client -->|Media Upload| CDN[Cloudinary CDN]
-    Client -->|Text Analysis| Gemini[Google Gemini API]
-    Client -->|Image Processing| FastAPI[Python Microservice]
-    
-    FastAPI -->|Computer Vision| YOLO[YOLOv8s-World]
-    FastAPI -->|Database Admin| Firestore
-```
+### 1. Citizen Interface
+- **Register / Login:** Secure authentication entry point.
+- **Submit Complaint:** Input form supporting text, image, and location data.
+- **Track Complaint:** Check real-time resolution status.
+- **Receive Updates:** Automated status notifications.
+
+### 2. Web Application (Frontend)
+- **React.js & Tailwind CSS:** Core UI framework and styling.
+- **Charts & Analytics:** Integrated via Recharts / Chart.js for data visualization.
+- **Maps & Location:** Geolocation interfaces built with Leaflet.
+
+### 3. Backend & Database (Firebase)
+- **Firebase Authentication:** Secure User Management (Email/Password).
+- **Cloud Firestore:** Centralized database for Complaints, Users, Notifications, and Status.
+- **Cloudinary:** Dedicated Image Upload & CDN Storage.
+
+### 4. AI Processing Layer
+- **NLP – Google Gemini API:**
+  - Complaint Categorization
+  - Priority Prediction
+  - Severity Analysis
+  - Summary Generation
+- **CV – YOLOv8 Object Detection:**
+  - Image Analysis
+  - Object / Issue Detection
+  - Category Mapping
+  - Confidence Score Computation
+
+### 5. Authority Interface
+- **Dashboard Overview:** Macro-level view of Total Complaints, Status, and Analytics.
+- **View Complaints:** Detailed filtering, search, and granular issue details.
+- **Update Status:** Mark issues as In Progress, Resolved, or Rejected.
+- **Analytics & Reports:** Detailed Charts, Trends, and Statistical breakdowns.
+- **Notifications:** Real-time operational alerts.
+
+### 6. External Services
+- **Geoapify API & OpenStreetMap (Nominatim):** Primary and fallback Reverse Geocoding.
+- **IPAPI:** IP-based Geolocation fallback.
+- **Google Gemini API & YOLOv8 Model Server:** Dedicated microservices for NLP and Image Analysis.
+
+### System Workflow
+`Citizen Submits Complaint` ➔ `AI Processes Complaint` ➔ `Stored in Firestore` ➔ `Authority Reviews` ➔ `Status Updated` ➔ `Citizen Notified`
 
 ---
 
-## Technology Stack
+## Tech Stack
 
-### Frontend Application
-- **Framework:** React 19, Vite
-- **Styling:** Tailwind CSS 4
-- **State Management:** React Context API
-- **Visualization:** Recharts, Leaflet Maps
-- **Internationalization:** i18next
+Our technology stack is systematically divided into 6 specialized domains:
 
-### Backend Infrastructure
-- **Database:** Firebase Cloud Firestore (NoSQL)
-- **Authentication:** Firebase Auth
-- **Storage:** Cloudinary CDN
+| Domain | Technologies Utilized | Purpose |
+| :--- | :--- | :--- |
+| **1. Frontend** | React.js, Tailwind CSS, HTML5, CSS3, JavaScript, React Router DOM, Lucide React, Recharts, i18next, Leaflet | Core UI Library, Styling, Routing, Icons, Charting, Internationalization, and Mapping. |
+| **2. Backend / Database / Cloud** | Firebase Authentication, Cloud Firestore, Cloudinary | User Authentication, Real-time Database sync, Image Storage & CDN. |
+| **3. AI / Machine Learning** | Google Gemini API, YOLOv8 | NLP (Categorization, Priority, Summary) and Object Detection for Civic Issues. |
+| **4. Visualization & Analytics** | Chart.js / Recharts, Power BI | Interactive Charts, Dashboards & Business Insights. |
+| **5. External APIs** | Geoapify API, OpenStreetMap, ipapi.co, Cloudinary API, Web Speech API | Geocoding, Reverse Geocoding, IP Geolocation, Image Management, Voice-to-Text Input. |
+| **6. Tools & Platforms** | Vite, VS Code, GitHub, npm, Postman, Figma | Build Tool, Code Editor, Version Control, Package Manager, API Testing, UI/UX Design. |
 
-### AI & Microservices
-- **Microservice Framework:** Python, FastAPI
-- **Computer Vision:** YOLOv8s-World (Ultralytics)
-- **Natural Language Processing:** Google Gemini 2.5 Flash
+**Stack Overview Data Flow:**
+`Users` ➔ `Frontend` ➔ `Backend` ➔ `AI/ML Processing` ➔ `Analytics & Dashboard` ➔ `Real-time Notifications`
 
 ---
 
 ## Key Features
-
 - **Role-Based Access Control (RBAC):** Distinct interfaces and permissions for Citizens and Government Authorities.
 - **Automated AI Triage:** Real-time extraction of categories, priority levels, and executive summaries from unstructured text.
-- **Zero-Shot Object Detection:** Image verification using YOLO to independently identify civic issues (e.g., potholes, waste accumulation).
+- **Zero-Shot Object Detection:** Image verification using YOLO to independently identify civic issues.
 - **Geospatial Intelligence:** Automated coordinate extraction and reverse geocoding via ArcGIS and Nominatim.
 - **Analytics Dashboards:** Comprehensive data visualization for tracking resolution metrics and geographical complaint hotspots.
-- **Multi-Language Support:** Localized interface supporting English, Hindi, Marathi, Tamil, Telugu, and Kannada.
-
----
-
-## AI Integration Pipeline
-
-```mermaid
-stateDiagram-v2
-    direction LR
-    [*] --> Submission
-    Submission --> GeminiNLP : Text Input
-    Submission --> YOLOv8s : Image Input
-    GeminiNLP --> Aggregation : Category & Priority
-    YOLOv8s --> Aggregation : Visual Verification
-    Aggregation --> Firestore : Final Severity Score
-    Firestore --> AuthorityDashboard : Actionable Report
-```
 
 ---
 
@@ -106,15 +115,9 @@ stateDiagram-v2
 
 ### Frontend Initialization
 ```bash
-# Clone the repository
 git clone https://github.com/your-username/civicpulse-smart-civic-platform.git
 cd civicpulse-smart-civic-platform
-
-# Install dependencies
 npm install
-
-# Configure environment variables (see docs/Environment_Variables.md)
-# Start the development server
 npm run dev
 ```
 
@@ -122,12 +125,7 @@ npm run dev
 ```bash
 cd ai-microservice
 python -m venv venv
-
-# Windows
-venv\Scripts\activate
-# Unix/macOS
-source venv/bin/activate
-
+venv\Scripts\activate   # Windows
 pip install -r requirements.txt
 python main.py
 ```
